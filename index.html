@@ -752,7 +752,6 @@ function closeModal(e) {
 // ─── INIT ─────────────────────────────────────────────────────────────────────
 if (icalUrl) {
   document.getElementById('icalInput').value = icalUrl;
-  document.getElementById('setupBanner').style.display = 'none';
   autoSync();
   setInterval(autoSync, 5 * 60 * 1000);
 } else {
