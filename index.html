@@ -485,7 +485,7 @@ function parseICS(text) {
       else if (key === 'DTSTART') cur.start = parseDate(raw);
       else if (key === 'DTEND')   cur.end   = parseDate(raw);
       else if (key === 'LOCATION') cur.location = val;
-      else if (key === 'URL')  cur.url  = val;
+      else if (key === 'URL')  cur.url  = val.startsWith('http') ? val : 'https://' + val;
       else if (key === 'DESCRIPTION') cur.description = val.replace(/\\n/g,'\n').replace(/\\,/g,',');
     }
   }
