@@ -459,7 +459,10 @@ function renderMonthly() {
     cell.className = 'grid-cell' + (otherMonth ? ' other-month' : '') + (isToday ? ' today' : '');
     const dateEl = document.createElement('div');
     dateEl.className = 'cell-date';
-    dateEl.textContent = day;
+    const isFirstOfMonth = day === 1;
+    dateEl.textContent = isFirstOfMonth
+      ? new Date(year, month, 1).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+      : day;
     cell.appendChild(dateEl);
     const dayEvs = events.filter(e => {
       const d = new Date(e.start); return d.getFullYear()===year && d.getMonth()===month && d.getDate()===day;
