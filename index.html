@@ -271,18 +271,25 @@ function parseICS(text) {
   text = text.replace(/\r\n[ \t]/g, '').replace(/\r\n/g, '\n').replace(/\n[ \t]/g, '');
   const lines = text.split('\n');
   const evs = []; let cur = null;
-  const parseDate = (s, tzid) => {
-    if (!s) return null;
-    s = s.replace(/^[^:]+:/, '');
-    const y=+s.slice(0,4),mo=+s.slice(4,6)-1,d=+s.slice(6,8);
-    if (s.includes('T')) {
-      const h=+s.slice(9,11),mi=+s.slice(11,13);
-      if (s.endsWith('Z')) return new Date(Date.UTC(y,mo,d,h,mi));
-      if (tzid) return new Date(new Date(`${y}-${String(mo+1).padStart(2,'0')}-${String(d).padStart(2,'0')}T${String(h).padStart(2,'0')}:${String(mi).padStart(2,'0')}:00`).toLocaleString('en-US', {timeZone: tzid}));
-      return new Date(y,mo,d,h,mi);
+  const parseDate = s => {
+  if (!s) return null;
+  const tzMatch = s.match(/TZID=([^:]+)/);
+  const tzid = tzMatch ? tzMatch[1] : null;
+  s = s.replace(/^[^:]+:/, '');
+  const y=+s.slice(0,4),mo=+s.slice(4,6)-1,d=+s.slice(6,8);
+  if (s.includes('T')) {
+    const h=+s.slice(9,11),mi=+s.slice(11,13);
+    if (s.endsWith('Z')) return new Date(Date.UTC(y,mo,d,h,mi));
+    if (tzid) {
+      const iso = `${y}-${String(mo+1).padStart(2,'0')}-${String(d).padStart(2,'0')}T${String(h).padStart(2,'0')}:${String(mi).padStart(2,'0')}:00`;
+      const utcMs = new Date(iso + 'Z').getTime();
+      const gstOffset = 4 * 60;
+      return new Date(utcMs + gstOffset * 60000);
     }
-    return new Date(y,mo,d);
-  };
+    return new Date(y,mo,d,h,mi);
+  }
+  return new Date(y,mo,d);
+};
   for (const raw of lines) {
     const colon = raw.indexOf(':');
     if (colon < 0) continue;
@@ -305,8 +312,8 @@ function parseICS(text) {
       cur = null;
     } else if (cur) {
       if (key === 'SUMMARY') cur.title = val;
-      else if (key === 'DTSTART') { cur.tzid = raw.match(/TZID=([^:]+)/)?.[1]; cur.start = parseDate(raw, cur.tzid); }
-      else if (key === 'DTEND')   cur.end = parseDate(raw, cur.tzid);
+      else if (key === 'DTSTART') cur.start = parseDate(raw);
+      else if (key === 'DTEND')   cur.end   = parseDate(raw);
       else if (key === 'LOCATION') cur.location = val;
       else if (key === 'URL') cur.url = val;
       else if (key === 'DESCRIPTION') cur.description = val.replace(/\\n/g,'\n').replace(/\\,/g,',');
