@@ -348,9 +348,14 @@ async function autoSync() {
   if (!icalUrl) return;
   setSyncing(true);
   try {
-    const proxyUrl = 'https://corsproxy.io/?' + encodeURIComponent(icalUrl);
+    const proxyUrl = 'https://api.allorigins.win/get?url=' + encodeURIComponent(icalUrl);
     const res = await fetch(proxyUrl);
-    const text = await res.text();
+    const json = await res.json();
+    let text = json.contents || '';
+    const prefix = 'data:text/calendar; charset=UTF-8;base64,';
+    const prefix2 = 'data:text/calendar;charset=UTF-8;base64,';
+    if (text.startsWith(prefix)) text = atob(text.slice(prefix.length));
+    else if (text.startsWith(prefix2)) text = atob(text.slice(prefix2.length));
     events = parseICS(text);
     render();
     setSyncing(false, 'Synced · iCloud');
