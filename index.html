@@ -375,7 +375,7 @@ async function autoSync() {
   if (!icalUrl) return;
   setSyncing(true);
   try {
-    const proxyUrl = 'https://corsproxy.io/?' + encodeURIComponent(icalUrl);
+   const proxyUrl = 'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(icalUrl) + '&_=' + Date.now();
     const res = await fetch(proxyUrl);
     const text = await res.text();
     events = parseICS(text);
