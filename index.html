@@ -352,9 +352,9 @@ function parseSpecialization(desc) {
   }
 
   // Extract specialization
-  const match = desc.match(/specialization\s*:\s*([^\n]+)/i);
+  const match = desc.match(/specialization\s*:\s*([^\n\r\\]+)/i);
   if (match) {
-    const val = match[1].trim().toLowerCase();
+    const val = match[1].replace(/\\n.*$/,'').trim().toLowerCase();
     for (const [k, v] of Object.entries(map)) { if (val.includes(k)) { category = v; break; } }
     cleanDesc = cleanDesc.replace(/specialization\s*:[^\n]*/i, '');
   }
