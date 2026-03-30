@@ -348,18 +348,9 @@ async function autoSync() {
   if (!icalUrl) return;
   setSyncing(true);
   try {
-    let text = '';
-    const proxies = [
-      'https://corsproxy.io/?' + encodeURIComponent(icalUrl),
-      'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(icalUrl),
-    ];
-    for (const proxyUrl of proxies) {
-      try {
-        const res = await fetch(proxyUrl);
-        text = await res.text();
-        if (text.includes('VCALENDAR')) break;
-      } catch(e) { continue; }
-    }
+    const proxyUrl = 'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(icalUrl);
+    const res = await fetch(proxyUrl);
+    const text = await res.text();
     if (!text.includes('VCALENDAR')) { setSyncing(false, 'Sync failed'); return; }
     events = parseICS(text);
     render();
