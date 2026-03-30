@@ -348,14 +348,19 @@ async function autoSync() {
   if (!icalUrl) return;
   setSyncing(true);
   try {
-    const proxyUrl = 'https://api.allorigins.win/get?url=' + encodeURIComponent(icalUrl);
-    const res = await fetch(proxyUrl);
-    const json = await res.json();
-    let text = json.contents || '';
-    const prefix = 'data:text/calendar; charset=UTF-8;base64,';
-    const prefix2 = 'data:text/calendar;charset=UTF-8;base64,';
-    if (text.startsWith(prefix)) text = atob(text.slice(prefix.length));
-    else if (text.startsWith(prefix2)) text = atob(text.slice(prefix2.length));
+    let text = '';
+    const proxies = [
+      'https://corsproxy.io/?' + encodeURIComponent(icalUrl),
+      'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(icalUrl),
+    ];
+    for (const proxyUrl of proxies) {
+      try {
+        const res = await fetch(proxyUrl);
+        text = await res.text();
+        if (text.includes('VCALENDAR')) break;
+      } catch(e) { continue; }
+    }
+    if (!text.includes('VCALENDAR')) { setSyncing(false, 'Sync failed'); return; }
     events = parseICS(text);
     render();
     setSyncing(false, 'Synced · iCloud');
