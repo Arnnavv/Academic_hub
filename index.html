@@ -273,9 +273,21 @@ function parseICS(text) {
   const evs = []; let cur = null;
   const parseDate = s => {
   if (!s) return null;
+  const tzid = (s.match(/TZID=([^:;]+)/) || [])[1];
   s = s.replace(/^[^:]+:/, '');
   const y=+s.slice(0,4),mo=+s.slice(4,6)-1,d=+s.slice(6,8);
-  if (s.includes('T')) { const h=+s.slice(9,11),mi=+s.slice(11,13); return new Date(y,mo,d,h,mi); }
+  if (s.includes('T')) {
+    const h=+s.slice(9,11),mi=+s.slice(11,13);
+    if (s.endsWith('Z')) return new Date(Date.UTC(y,mo,d,h,mi));
+    if (tzid) {
+      const iso = `${y}-${String(mo+1).padStart(2,'0')}-${String(d).padStart(2,'0')}T${String(h).padStart(2,'0')}:${String(mi).padStart(2,'0')}:00`;
+      return new Date(new Intl.DateTimeFormat('en-US', {
+        timeZone: tzid, year:'numeric', month:'numeric', day:'numeric',
+        hour:'numeric', minute:'numeric', second:'numeric'
+      }).format(new Date(iso)).replace(/(\d+)\/(\d+)\/(\d+)/, '$3-$1-$2'));
+    }
+    return new Date(y,mo,d,h,mi);
+  }
   return new Date(y,mo,d);
 };
   for (const raw of lines) {
