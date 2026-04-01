@@ -67,11 +67,11 @@
   /* ── MONTHLY ── */
   #monthly-view { display: block; }
   #weekly-view { display: none; }
-  .calendar-grid { background: var(--surface); border-radius: var(--radius); border: 1px solid var(--border); overflow: hidden; box-shadow: var(--shadow); }
-  .day-headers { display: grid; grid-template-columns: repeat(7, 1fr); background: var(--accent); }
+  .calendar-grid { background: var(--surface); border-radius: var(--radius); border: 1px solid var(--border); overflow-x: auto; box-shadow: var(--shadow); }
+  .day-headers { display: grid; grid-template-columns: repeat(7, minmax(120px, 1fr)); background: var(--accent); }
   .day-header { padding: 11px 0; text-align: center; font-size: 11px; font-weight: 500; color: rgba(255,255,255,0.75); text-transform: uppercase; letter-spacing: 0.08em; }
-  .grid-body { display: grid; grid-template-columns: repeat(7, 1fr); }
-  .grid-cell { min-height: 108px; padding: 8px 7px; border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); transition: background 0.12s; }
+  .grid-body { display: grid; grid-template-columns: repeat(7, minmax(120px, 1fr)); }
+  .grid-cell { min-height: 108px; min-width: 0; padding: 8px 7px; border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); transition: background 0.12s; overflow: hidden; }
   .grid-cell:nth-child(7n) { border-right: none; }
   .grid-cell.other-month { background: #FAFAF8; }
   .grid-cell.today { background: var(--accent-light); }
