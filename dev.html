@@ -606,6 +606,13 @@ function fmtTime(d) {
   
 // ─── MODAL ────────────────────────────────────────────────────────────────────
 function openModal(ev) {
+  document.querySelector('.modal-body').innerHTML = `
+    <div class="modal-row"><span class="modal-icon">📅</span><div><div class="modal-row-label" id="modalDate"></div></div></div>
+    <div class="modal-row"><span class="modal-icon">🕐</span><div><div class="modal-row-label" id="modalTime"></div></div></div>
+    <div class="modal-row"><span class="modal-icon">🎓</span><div><div class="modal-row-label">Specialization</div><div class="modal-row-sub" id="modalSpecialization"></div></div></div>
+    <div class="modal-row" id="modalLocationRow" style="display:none"><span class="modal-icon">📍</span><div><div class="modal-row-label" id="modalLocation"></div></div></div>
+    <div class="modal-row" id="modalDescRow" style="display:none"><span class="modal-icon">📝</span><div><div class="modal-row-label" id="modalDesc"></div></div></div>
+  `;
   const catColors = {
     common:      {bg:'var(--common-bg)',      color:'var(--common)',      label:'Core – All Students'},
     finance:     {bg:'var(--finance-bg)',     color:'var(--finance)',     label:'Finance'},
@@ -631,14 +638,8 @@ function openModal(ev) {
 function closeModal(e) {
   if (!e||e.target===document.getElementById('modalOverlay')||!e.target) {
     document.getElementById('modalOverlay').classList.remove('open');
-    document.querySelector('.modal-body').innerHTML = `
-      <div class="modal-row"><span class="modal-icon">📅</span><div><div class="modal-row-label" id="modalDate"></div></div></div>
-      <div class="modal-row"><span class="modal-icon">🕐</span><div><div class="modal-row-label" id="modalTime"></div></div></div>
-      <div class="modal-row"><span class="modal-icon">🎓</span><div><div class="modal-row-label">Specialization</div><div class="modal-row-sub" id="modalSpecialization"></div></div></div>
-      <div class="modal-row" id="modalLocationRow" style="display:none"><span class="modal-icon">📍</span><div><div class="modal-row-label" id="modalLocation"></div></div></div>
-      <div class="modal-row" id="modalDescRow" style="display:none"><span class="modal-icon">📝</span><div><div class="modal-row-label" id="modalDesc"></div></div></div>
-    `;
   }
+}
 }
 
 // ─── INIT ─────────────────────────────────────────────────────────────────────
