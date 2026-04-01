@@ -97,7 +97,7 @@
   .week-header-day.today-col { color: #fff; }
   .week-header-date { font-size: 22px; font-family: 'Playfair Display', serif; display: block; color: rgba(255,255,255,0.9); line-height: 1.2; }
   .week-header-day.today-col .week-header-date { background: rgba(255,255,255,0.25); border-radius: 50%; width: 36px; height: 36px; display: inline-flex; align-items: center; justify-content: center; }
-  .week-scroll { overflow-y: visible; }
+  .week-sticky-header { position: sticky; top: 55px; z-index: 98; }
   .week-body-grid { display: grid; grid-template-columns: 64px repeat(7, 1fr); position: relative; }
   .week-time-col { display: flex; flex-direction: column; border-right: 1px solid var(--border); }
   .week-time-slot { height: var(--hour-height); display: flex; align-items: flex-start; justify-content: flex-end; padding-right: 8px; padding-top: 4px; font-size: 10px; color: var(--text-muted); border-bottom: 1px solid var(--border); flex-shrink: 0; }
@@ -232,13 +232,11 @@
 
   <!-- Weekly View -->
   <div id="weekly-view">
-    <div class="week-container">
+    <div class="week-sticky-header">
       <div class="week-header-row" id="weekHeaders"></div>
-      <div class="week-outer">
-        <div class="week-scroll">
-          <div class="week-body-grid" id="weekBodyGrid"></div>
-        </div>
-      </div>
+    </div>
+    <div class="week-outer">
+      <div class="week-body-grid" id="weekBodyGrid"></div>
     </div>
   </div>
 
@@ -653,25 +651,6 @@ function closeModal(e) {
     document.getElementById('modalOverlay').classList.remove('open');
   }
 }
-
-// --- extra function addede----
-  window.addEventListener('scroll', function() {
-  const weekView = document.getElementById('weekly-view');
-  const weekHeader = document.getElementById('weekHeaders');
-  if (!weekView || currentView !== 'weekly') return;
-  const weekTop = weekView.getBoundingClientRect().top;
-  const controlsHeight = 55;
-  if (weekTop <= controlsHeight) {
-    weekHeader.style.position = 'fixed';
-    weekHeader.style.top = controlsHeight + 'px';
-    weekHeader.style.width = weekView.offsetWidth + 'px';
-    weekHeader.style.zIndex = '98';
-  } else {
-    weekHeader.style.position = 'relative';
-    weekHeader.style.top = '';
-    weekHeader.style.width = '';
-  }
-});
 
 // ─── INIT ─────────────────────────────────────────────────────────────────────
 autoSync();
