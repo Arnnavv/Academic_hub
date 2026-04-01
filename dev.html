@@ -90,7 +90,7 @@
 
   /* ── WEEKLY - GOOGLE CALENDAR STYLE ── */
   .week-outer { background: var(--surface); border-radius: var(--radius); border: 1px solid var(--border); box-shadow: var(--shadow); overflow: hidden; }
-  .week-header-row { display: grid; grid-template-columns: 64px repeat(7, 1fr); background: var(--accent); }
+  .week-header-row { display: grid; grid-template-columns: 64px repeat(7, 1fr); background: var(--accent); position: sticky; top: 135px; z-index: 98; }
   .week-header-time-gutter { border-right: 1px solid rgba(255,255,255,0.15); }
   .week-header-day { padding: 12px 4px; text-align: center; font-size: 11px; color: rgba(255,255,255,0.75); text-transform: uppercase; letter-spacing: 0.07em; font-weight: 500; border-left: 1px solid rgba(255,255,255,0.1); }
   .week-header-day.today-col { color: #fff; }
