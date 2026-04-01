@@ -124,7 +124,7 @@
   .week-ev.ev-marketing { background: var(--marketing-bg); color: var(--marketing); border-left-color: var(--marketing); }
   .week-ev.ev-supplychain { background: var(--supplychain-bg); color: var(--supplychain); border-left-color: var(--supplychain); }
   .week-ev-title { font-weight: 700; white-space: normal; overflow: hidden; line-height: 1.4; word-break: break-word; font-size: 11px; }
-  .week-ev-time { font-size: 11px; opacity: 1; white-space: nowrap; margin-top: 2px; }
+  .week-ev-time { font-size: 11px; opacity: 1; white-space: nowrap; margin-top: 5px; }
 
   /* ── LEGEND ── */
   .legend { display: flex; gap: 20px; margin-bottom: 18px; align-items: center; flex-wrap: wrap; }
@@ -544,7 +544,7 @@ function renderWeekly() {
 
       const title = document.createElement('div');
       title.className = 'week-ev-title';
-      title.textContent = ev.title;
+      title.textContent = `<strong>${ev.title}</strong>`;
 
       const time = document.createElement('div');
       time.className = 'week-ev-time';
