@@ -44,7 +44,7 @@
   @keyframes spin-dot { 0%{opacity:1}50%{opacity:0.3}100%{opacity:1} }
 
   /* ── CONTROLS BAR ── */
-  .controls { background: var(--surface); border-bottom: 1px solid var(--border); padding: 14px 40px; display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+  .controls { background: var(--surface); border-bottom: 1px solid var(--border); padding: 14px 40px; display: flex; align-items: center; gap: 20px; flex-wrap: wrap; position: sticky; top: 70px; z-index: 99; }
   .filter-group { display: flex; gap: 8px; align-items: center; }
   .filter-label { font-size: 12px; color: var(--text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; margin-right: 4px; }
   .pill { padding: 6px 16px; border-radius: 20px; font-size: 13px; font-weight: 500; border: 1.5px solid var(--border); background: var(--surface); cursor: pointer; transition: all 0.18s; color: var(--text-secondary); }
@@ -96,7 +96,7 @@
   .week-header-day.today-col { color: #fff; }
   .week-header-date { font-size: 22px; font-family: 'Playfair Display', serif; display: block; color: rgba(255,255,255,0.9); line-height: 1.2; }
   .week-header-day.today-col .week-header-date { background: rgba(255,255,255,0.25); border-radius: 50%; width: 36px; height: 36px; display: inline-flex; align-items: center; justify-content: center; }
-  .week-scroll { overflow-y: auto; max-height: 75vh; }
+  .week-scroll { overflow-y: visible; }
   .week-body-grid { display: grid; grid-template-columns: 64px repeat(7, 1fr); position: relative; }
   .week-time-col { display: flex; flex-direction: column; border-right: 1px solid var(--border); }
   .week-time-slot { height: var(--hour-height); display: flex; align-items: flex-start; justify-content: flex-end; padding-right: 8px; padding-top: 4px; font-size: 10px; color: var(--text-muted); border-bottom: 1px solid var(--border); flex-shrink: 0; }
