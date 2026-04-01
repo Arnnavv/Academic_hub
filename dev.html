@@ -585,16 +585,20 @@ function fmtTime(d) {
   cat.style.color = 'var(--accent)';
   title.textContent = 'All Classes';
   footer.innerHTML = '';
-  body.innerHTML = dayEvs.map(ev => `
-    <div onclick="openModal(window._dayEvs.find(e=>e.id==='${ev.id}'))" style="padding:10px 0;border-bottom:1px solid var(--border);cursor:pointer;display:flex;align-items:center;gap:10px;">
+  body.innerHTML = '';
+  dayEvs.forEach(ev => {
+    const row = document.createElement('div');
+    row.style.cssText = 'padding:10px 0;border-bottom:1px solid var(--border);cursor:pointer;display:flex;align-items:center;gap:10px;';
+    row.innerHTML = `
       <span style="width:8px;height:8px;border-radius:2px;flex-shrink:0;background:var(--${ev.category==='common'?'common':ev.category==='finance'?'finance':ev.category==='marketing'?'marketing':'supplychain'})"></span>
       <div>
         <div style="font-weight:500;font-size:14px;">${ev.title}</div>
         <div style="font-size:12px;color:var(--text-muted)">${fmtTime(new Date(ev.start))} – ${fmtTime(new Date(ev.end))}</div>
       </div>
-    </div>
-  `).join('');
-  window._dayEvs = dayEvs;
+    `;
+    row.onclick = () => openModal(ev);
+    body.appendChild(row);
+  });
   overlay.classList.add('open');
 }
 
