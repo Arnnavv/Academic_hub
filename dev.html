@@ -29,7 +29,6 @@
     --shadow-lg: 0 8px 40px rgba(0,0,0,0.13);
     --hour-height: 60px;
   }
-  html, body { overflow-x: hidden; }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text-primary); min-height: 100vh; }
 
@@ -63,7 +62,7 @@
   .current-period { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 600; min-width: 220px; }
 
   /* ── MAIN ── */
-  main { padding: 28px 40px; max-width: 1300px; margin: 0 auto; overflow: visible; }
+  main { padding: 28px 40px; max-width: 1300px; margin: 0 auto; }
 
   /* ── MONTHLY ── */
   #monthly-view { display: block; }
@@ -92,7 +91,7 @@
   /* ── WEEKLY - GOOGLE CALENDAR STYLE ── */
   .week-outer { background: var(--surface); border-radius: var(--radius); border: 1px solid var(--border); box-shadow: var(--shadow); overflow: visible; }
   .week-container { position: relative; min-height: 100vh; }
-  .week-header-row { display: grid; grid-template-columns: 64px repeat(7, 1fr); background: var(--accent); position: sticky; top: 55px; z-index: 98; }
+  .week-header-row { display: grid; grid-template-columns: 64px repeat(7, 1fr); background: var(--accent); }
   .week-header-time-gutter { border-right: 1px solid rgba(255,255,255,0.15); }
   .week-header-day { padding: 12px 4px; text-align: center; font-size: 11px; color: rgba(255,255,255,0.75); text-transform: uppercase; letter-spacing: 0.07em; font-weight: 500; border-left: 1px solid rgba(255,255,255,0.1); }
   .week-header-day.today-col { color: #fff; }
@@ -654,6 +653,25 @@ function closeModal(e) {
     document.getElementById('modalOverlay').classList.remove('open');
   }
 }
+
+// --- extra function addede----
+  window.addEventListener('scroll', function() {
+  const weekView = document.getElementById('weekly-view');
+  const weekHeader = document.getElementById('weekHeaders');
+  if (!weekView || currentView !== 'weekly') return;
+  const weekTop = weekView.getBoundingClientRect().top;
+  const controlsHeight = 55;
+  if (weekTop <= controlsHeight) {
+    weekHeader.style.position = 'fixed';
+    weekHeader.style.top = controlsHeight + 'px';
+    weekHeader.style.width = weekView.offsetWidth + 'px';
+    weekHeader.style.zIndex = '98';
+  } else {
+    weekHeader.style.position = 'relative';
+    weekHeader.style.top = '';
+    weekHeader.style.width = '';
+  }
+});
 
 // ─── INIT ─────────────────────────────────────────────────────────────────────
 autoSync();
