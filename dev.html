@@ -452,7 +452,13 @@ function renderMonthly() {
       chip.textContent=ev.title; chip.title=ev.title; chip.onclick=()=>openModal(ev);
       cell.appendChild(chip);
     });
-    if (dayEvs.length>3) { const more=document.createElement('div'); more.className='more-events'; more.textContent='+'+(dayEvs.length-3)+' more'; more.onclick=()=>openModal(dayEvs[3]); cell.appendChild(more); }
+    if (dayEvs.length>3) {
+  const more=document.createElement('div');
+  more.className='more-events';
+  more.textContent='+'+(dayEvs.length-3)+' more';
+  more.onclick=()=>openDayPopup(dayEvs, new Date(year,month,day));
+  cell.appendChild(more);
+}
     grid.appendChild(cell);
   }
 }
@@ -566,6 +572,34 @@ function fmtTime(d) {
   return h+(mi?':'+String(mi).padStart(2,'0'):'')+ampm;
 }
 
+
+// ─── MonthlyDay PopUp ────────────────────────────────────────────────────────────────────
+  function openDayPopup(dayEvs, date) {
+  const overlay = document.getElementById('modalOverlay');
+  const cat = document.getElementById('modalCategory');
+  const title = document.getElementById('modalTitle');
+  const body = document.querySelector('.modal-body');
+  const footer = document.getElementById('modalLinkArea');
+  cat.textContent = date.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
+  cat.style.background = 'var(--accent-light)';
+  cat.style.color = 'var(--accent)';
+  title.textContent = 'All Classes';
+  footer.innerHTML = '';
+  body.innerHTML = dayEvs.map(ev => `
+    <div onclick="openModal(window._dayEvs.find(e=>e.id==='${ev.id}'))" style="padding:10px 0;border-bottom:1px solid var(--border);cursor:pointer;display:flex;align-items:center;gap:10px;">
+      <span style="width:8px;height:8px;border-radius:2px;flex-shrink:0;background:var(--${ev.category==='common'?'common':ev.category==='finance'?'finance':ev.category==='marketing'?'marketing':'supplychain'})"></span>
+      <div>
+        <div style="font-weight:500;font-size:14px;">${ev.title}</div>
+        <div style="font-size:12px;color:var(--text-muted)">${fmtTime(new Date(ev.start))} – ${fmtTime(new Date(ev.end))}</div>
+      </div>
+    </div>
+  `).join('');
+  window._dayEvs = dayEvs;
+  overlay.classList.add('open');
+}
+
+
+  
 // ─── MODAL ────────────────────────────────────────────────────────────────────
 function openModal(ev) {
   const catColors = {
