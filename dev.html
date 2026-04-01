@@ -544,7 +544,7 @@ function renderWeekly() {
 
       const title = document.createElement('div');
       title.className = 'week-ev-title';
-      title.textContent = `<strong>${ev.title}</strong>`;
+      title.innerHTML = `<strong>${ev.title}</strong>`;
 
       const time = document.createElement('div');
       time.className = 'week-ev-time';
