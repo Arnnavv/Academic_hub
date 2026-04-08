@@ -375,6 +375,7 @@ function selectSection(section) {
   const dd = document.getElementById('sectionDropdown');
   if (dd) dd.style.display = 'none';
   localStorage.setItem('selectedSection', section);
+  localStorage.setItem('sectionTimestamp', Date.now().toString());
   icalUrl = SECTION_URLS[section];
   document.getElementById('sectionBadgeText').textContent = 'Section ' + section;
   document.getElementById('headerSub').textContent = 'Section ' + section + ' · Academic Calendar';
@@ -733,13 +734,25 @@ function closeModal(e) {
 }
 
 // ─── INIT ─────────────────────────────────────────────────────────────────────
+// ─── SESSION DURATION (change this value) ────────────────────────────────────
+const SESSION_DAYS = 2/1440; // Session lasts 30 days — change to any number
+
+// ─── INIT ─────────────────────────────────────────────────────────────────────
 const savedSection = localStorage.getItem('selectedSection');
-if (savedSection) {
+const savedTime = localStorage.getItem('sectionTimestamp');
+const sessionExpiry = SESSION_DAYS * 24 * 60 * 60 * 1000;
+const sessionValid = savedTime && (Date.now() - parseInt(savedTime)) < sessionExpiry;
+
+if (savedSection && sessionValid) {
   selectSection(savedSection);
 } else {
+  localStorage.removeItem('selectedSection');
+  localStorage.removeItem('sectionTimestamp');
   document.getElementById('welcome-page').style.display = 'flex';
   document.getElementById('calendar-app').style.display = 'none';
 }
+setInterval(autoSync, 5*60*1000);
+render();
 setInterval(autoSync, 5*60*1000);
 render();
 </script>
