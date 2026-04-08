@@ -685,8 +685,12 @@ function closeModal(e) {
 }
 
 // ─── INIT ─────────────────────────────────────────────────────────────────────
-const savedSection = localStorage.getItem('selectedSection') || 'B';
-selectSection(savedSection);
+const savedSection = localStorage.getItem('selectedSection');
+if (savedSection) {
+  selectSection(savedSection);
+} else {
+  // Show welcome page - you need the welcome page HTML too
+}
 setInterval(autoSync, 5*60*1000);
 render();
 </script>
