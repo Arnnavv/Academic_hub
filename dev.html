@@ -751,9 +751,21 @@ if (savedSection && sessionValid) {
   document.getElementById('welcome-page').style.display = 'flex';
   document.getElementById('calendar-app').style.display = 'none';
 }
+
 setInterval(autoSync, 5*60*1000);
-render();
-setInterval(autoSync, 5*60*1000);
+
+// ─── SESSION EXPIRY CHECKER ───────────────────────────────────────────────────
+setInterval(() => {
+  const savedTime = localStorage.getItem('sectionTimestamp');
+  const sessionExpiry = SESSION_DAYS * 24 * 60 * 60 * 1000;
+  if (savedTime && (Date.now() - parseInt(savedTime)) >= sessionExpiry) {
+    localStorage.removeItem('selectedSection');
+    localStorage.removeItem('sectionTimestamp');
+    document.getElementById('calendar-app').style.display = 'none';
+    document.getElementById('welcome-page').style.display = 'flex';
+  }
+}, 10 * 1000);
+
 render();
 </script>
 </body>
