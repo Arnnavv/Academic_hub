@@ -396,14 +396,15 @@
 function showSectionSelector() {
   document.getElementById('portal-page').style.display = 'none';
   document.getElementById('welcome-page').style.display = 'flex';
+  document.title = 'Class Schedule';
 }
 
 function showPortal() {
   document.title = 'Academic Hub';
   document.querySelector('link[rel="icon"]').href = "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>";
+  document.getElementById('portal-page').style.display = 'flex';
   document.getElementById('welcome-page').style.display = 'none';
   document.getElementById('calendar-app').style.display = 'none';
-  document.getElementById('portal-page').style.display = 'flex';
 }
 
 // ─── SECTION CONFIG ───────────────────────────────────────────────────────────
