@@ -48,7 +48,7 @@ function showPortal() {
 const SECTION_URLS = {
   'A':   'https://PASTE_SECTION_A_ICAL_URL_HERE',
   'B':   'https://p136-caldav.icloud.com/published/2/MjAwNDQ0OTc1NDkyMDA0NJyAi43l6XUcJJh8O3fV_-Sp0FYDItEwZIhkGy0jKAXnBMy_0uSZ3zJilFwzBqGyqX-2SjO7zSNMkQn0AcS2JLA',
-  'F2F': 'https://PASTE_SECTION_F2F_ICAL_URL_HERE',
+  'F2F': 'https://p136-caldav.icloud.com/published/2/MjAwNDQ0OTc1NDkyMDA0NJyAi43l6XUcJJh8O3fV_-SwVZMeyBEw6TK28umK5f_lEVJGdl_jt-TRQZAZALrtWkz7SyNBg3p2Y2DKoA2QxZc',
 };
 
 // ─── STATE ────────────────────────────────────────────────────────────────────
