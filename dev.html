@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Academic Hub</title>
+  <link rel="icon" id="favicon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/style.css"/>
+</head>
+<body>
+
+<!-- ── LEVEL 1: PORTAL PAGE ── -->
+<div id="portal-page">
+  <div class="portal-logo">🎓</div>
+  <div class="portal-title">Academic Hub</div>
+  <div class="portal-subtitle">Your central space for schedules and coursework</div>
+  <div class="portal-cards">
+    <div class="portal-card" onclick="showSectionSelector()">
+      <span class="portal-card-icon">📅</span>
+      <span class="portal-card-title">Class Schedule</span>
+      <span class="portal-card-desc">View your timetable, class timings and join online sessions</span>
+      <span class="portal-card-btn">Open Calendar →</span>
+    </div>
+    <div class="portal-card" onclick="window.open('https://arnavv.notion.site/assignment-pipeline', '_blank')">
+      <span class="portal-card-icon">📋</span>
+      <span class="portal-card-title">Assignment Pipeline</span>
+      <span class="portal-card-desc">Track deadlines, pending tasks and submission details</span>
+      <span class="portal-card-btn">Open Notion →</span>
+    </div>
+  </div>
+  <div class="portal-footer">Select a tool to get started</div>
+</div>
+
+<!-- ── LEVEL 2: SECTION SELECTOR ── -->
+<div id="welcome-page" style="display:none;">
+  <div style="position:absolute;top:24px;left:32px;cursor:pointer;color:rgba(255,255,255,0.5);font-size:13px;display:flex;align-items:center;gap:6px;" onclick="showPortal()">← Back to Hub</div>
+  <div class="welcome-logo">📅</div>
+  <div class="welcome-title">Class Schedule</div>
+  <div class="welcome-subtitle">Academic Calendar Portal</div>
+  <div class="welcome-prompt">Select your section to continue</div>
+  <div class="section-cards">
+    <div class="section-card" onclick="selectSection('A')">
+      <span class="section-card-letter">A</span>
+      <span class="section-card-label">Section A</span>
+      <span class="section-card-btn">View Schedule →</span>
+    </div>
+    <div class="section-card" onclick="selectSection('B')">
+      <span class="section-card-letter">B</span>
+      <span class="section-card-label">Section B</span>
+      <span class="section-card-btn">View Schedule →</span>
+    </div>
+    <div class="section-card" onclick="selectSection('F2F')">
+      <span class="section-card-letter" style="font-size:40px;">F2F</span>
+      <span class="section-card-label">Face to Face</span>
+      <span class="section-card-btn">View Schedule →</span>
+    </div>
+  </div>
+  <div class="welcome-footer">Your selection will be remembered for next time</div>
+</div>
+
+<!-- ── LEVEL 3: CALENDAR APP ── -->
+<div id="calendar-app">
+
+  <header>
+    <div>
+      <div class="header-title">Class Schedule</div>
+      <div class="header-sub" id="headerSub">Academic Calendar Portal</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;">
+      <div class="section-badge" onclick="toggleSectionDropdown(event)" title="Switch section">
+        <span class="section-badge-dot"></span>
+        <span id="sectionBadgeText">Section B</span>
+        <span style="font-size:10px;opacity:0.7;">▾</span>
+        <div id="sectionDropdown" style="display:none;position:absolute;top:calc(100% + 8px);right:0;background:var(--surface);border:1px solid var(--border);border-radius:10px;box-shadow:var(--shadow-lg);overflow:hidden;min-width:160px;z-index:300;">
+          <div onclick="selectSection('A')" style="padding:12px 16px;cursor:pointer;font-size:13px;color:var(--text-primary);display:flex;align-items:center;gap:10px;" onmouseover="this.style.background='var(--bg)'" onmouseout="this.style.background='transparent'">
+            <span style="font-family:'Playfair Display',serif;font-size:18px;font-weight:700;">A</span>
+            <span>Section A</span>
+          </div>
+          <div style="height:1px;background:var(--border);margin:0 12px;"></div>
+          <div onclick="selectSection('B')" style="padding:12px 16px;cursor:pointer;font-size:13px;color:var(--text-primary);display:flex;align-items:center;gap:10px;" onmouseover="this.style.background='var(--bg)'" onmouseout="this.style.background='transparent'">
+            <span style="font-family:'Playfair Display',serif;font-size:18px;font-weight:700;">B</span>
+            <span>Section B</span>
+          </div>
+          <div style="height:1px;background:var(--border);margin:0 12px;"></div>
+          <div onclick="selectSection('F2F')" style="padding:12px 16px;cursor:pointer;font-size:13px;color:var(--text-primary);display:flex;align-items:center;gap:10px;" onmouseover="this.style.background='var(--bg)'" onmouseout="this.style.background='transparent'">
+            <span style="font-family:'Playfair Display',serif;font-size:14px;font-weight:700;">F2F</span>
+            <span>Face to Face</span>
+          </div>
+        </div>
+      </div>
+      <div class="sync-badge" id="syncBadge" onclick="manualSync()" title="Click to sync now">
+        <span class="sync-dot" id="syncDot"></span>
+        <span id="syncText">Live from iCloud</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="controls">
+    <div class="nav-area">
+      <button class="nav-btn" onclick="navigate(-1)">&#8249;</button>
+      <span class="current-period" id="periodLabel"></span>
+      <button class="nav-btn" onclick="navigate(1)">&#8250;</button>
+      <button class="nav-btn" onclick="goToday()" style="font-size:12px;padding:0 10px;width:auto;">Today</button>
+    </div>
+    <div class="filter-group">
+      <span class="filter-label">View:</span>
+      <button class="pill active-all" id="pill-all" onclick="setFilter('all')">All Classes</button>
+      <button class="pill" id="pill-finance" onclick="setFilter('finance')">Finance</button>
+      <button class="pill" id="pill-marketing" onclick="setFilter('marketing')">Marketing</button>
+      <button class="pill" id="pill-supplychain" onclick="setFilter('supplychain')">Supply Chain</button>
+    </div>
+    <div class="view-switcher">
+      <button class="view-btn active" id="btn-monthly" onclick="setView('monthly')">Monthly</button>
+      <button class="view-btn" id="btn-weekly" onclick="setView('weekly')">Weekly</button>
+    </div>
+  </div>
+
+  <main>
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px;padding:9px 14px;background:var(--accent-light);border:1px solid var(--border);border-radius:8px;font-size:13px;color:var(--text-secondary);">
+      <span style="font-size:15px;">🕐</span>
+      <span>All times shown in <strong style="color:var(--text-primary)" id="tzLabel"></strong></span>
+    </div>
+    <div class="legend">
+      <div class="legend-item"><span class="legend-dot dot-common"></span> Core (all students)</div>
+      <div class="legend-item"><span class="legend-dot dot-finance"></span> Finance</div>
+      <div class="legend-item"><span class="legend-dot dot-marketing"></span> Marketing</div>
+      <div class="legend-item"><span class="legend-dot dot-supplychain"></span> Supply Chain</div>
+    </div>
+    <div id="monthly-view">
+      <div class="calendar-grid">
+        <div class="day-headers">
+          <div class="day-header">Sun</div><div class="day-header">Mon</div>
+          <div class="day-header">Tue</div><div class="day-header">Wed</div>
+          <div class="day-header">Thu</div><div class="day-header">Fri</div>
+          <div class="day-header">Sat</div>
+        </div>
+        <div class="grid-body" id="monthGrid"></div>
+      </div>
+    </div>
+    <div id="weekly-view">
+      <div class="week-sticky-header">
+        <div class="week-header-row" id="weekHeaders"></div>
+      </div>
+      <div class="week-outer">
+        <div class="week-body-grid" id="weekBodyGrid"></div>
+      </div>
+    </div>
+  </main>
+
+</div><!-- end calendar-app -->
+
+<!-- ── EVENT MODAL ── -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal" id="modal">
+    <button class="modal-close" onclick="closeModal()">&times;</button>
+    <div class="modal-header">
+      <div class="modal-category" id="modalCategory"></div>
+      <div class="modal-title" id="modalTitle"></div>
+    </div>
+    <div class="modal-body">
+      <div class="modal-row"><span class="modal-icon">📅</span><div><div class="modal-row-label" id="modalDate"></div></div></div>
+      <div class="modal-row"><span class="modal-icon">🕐</span><div><div class="modal-row-label" id="modalTime"></div></div></div>
+      <div class="modal-row"><span class="modal-icon">🎓</span><div><div class="modal-row-label">Specialization</div><div class="modal-row-sub" id="modalSpecialization"></div></div></div>
+      <div class="modal-row" id="modalLocationRow" style="display:none"><span class="modal-icon">📍</span><div><div class="modal-row-label" id="modalLocation"></div></div></div>
+      <div class="modal-row" id="modalDescRow" style="display:none"><span class="modal-icon">📝</span><div><div class="modal-row-label" id="modalDesc"></div></div></div>
+    </div>
+    <div class="modal-footer" id="modalLinkArea"></div>
+  </div>
+</div>
+
+<script src="js/app.js"></script>
+</body>
+</html>
