@@ -83,11 +83,3 @@ To test changes safely, edit `dev.html` first and access it at `/dev.html` befor
 - GitHub Pages for free hosting
 
 ---
-
-## 📌 Pending / Roadmap
-
-- [ ] Add Section A iCal URL
-- [ ] Add F2F iCal URL
-- [ ] Add RRULE support for repeating events
-- [ ] Mobile responsive layout
-- [ ] Translate dev.html changes to index.html once tested
