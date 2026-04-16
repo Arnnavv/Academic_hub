@@ -2,7 +2,7 @@
 
 A personal academic portal built for managing class schedules, assignments and coursework — hosted on GitHub Pages.
 
-**Live site:** [arnnavv.github.io/Masters_schedule](https://arnnavv.github.io/Masters_schedule/)
+**Live site:** [arnnavv.github.io/Masters_schedule](https://arnnavv.github.io/Academic_hub/)
 
 ---
 
