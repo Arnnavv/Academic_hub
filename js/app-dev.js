@@ -60,7 +60,7 @@ let icalUrl = '';
 
 // ─── CONSTANTS ────────────────────────────────────────────────────────────────
 const HOUR_HEIGHT = 60;
-const DAY_START = 8;
+const DAY_START = 5;
 const DAY_END = 23;
 
 // ─── SECTION FUNCTIONS ────────────────────────────────────────────────────────
