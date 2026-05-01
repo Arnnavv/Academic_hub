@@ -46,7 +46,7 @@ function showPortal() {
 // ─── SECTION CONFIG ───────────────────────────────────────────────────────────
 // Add iCal URLs for each section here
 const SECTION_URLS = {
-  'A':   'https://PASTE_SECTION_A_ICAL_URL_HERE',
+  'A':   'https://p136-caldav.icloud.com/published/2/MjAwNDQ0OTc1NDkyMDA0NJyAi43l6XUcJJh8O3fV_-Sp0FYDItEwZIhkGy0jKAXnBMy_0uSZ3zJilFwzBqGyqX-2SjO7zSNMkQn0AcS2JLA',
   'B':   'https://p136-caldav.icloud.com/published/2/MjAwNDQ0OTc1NDkyMDA0NJyAi43l6XUcJJh8O3fV_-Sp0FYDItEwZIhkGy0jKAXnBMy_0uSZ3zJilFwzBqGyqX-2SjO7zSNMkQn0AcS2JLA',
   'F2F': 'https://p136-caldav.icloud.com/published/2/MjAwNDQ0OTc1NDkyMDA0NJyAi43l6XUcJJh8O3fV_-SwVZMeyBEw6TK28umK5f_lEVJGdl_jt-TRQZAZALrtWkz7SyNBg3p2Y2DKoA2QxZc',
 };
@@ -134,7 +134,7 @@ function parseICS(text) {
         evs.push({id:Math.random().toString(36).slice(2),title:cur.title||'Event',
           start:cur.start,end:cur.end||cur.start,location:cur.location||'',
           url:cur.url?(cur.url.startsWith('http')?cur.url:'https://'+cur.url):extractedUrl||'',
-          description:cleanDesc,category});
+          description:cleanDesc,category,sectionTag});
       }
       cur=null;
     } else if (cur) {
@@ -162,8 +162,17 @@ function parseSpecialization(desc) {
     cleanDesc = cleanDesc.replace(/specialization\s*:[^\n]*/i,'');
   }
   cleanDesc = cleanDesc.replace(/----\(.*?\)----/g,'').replace(/---[=\-]+---/g,'').replace(/--[=\-]+=*--*/g,'').replace(/\n{2,}/g,'\n').trim();
-  return {category,cleanDesc,extractedUrl};
-}
+  let sectionTag = 'both';
+  const sectionMatch = cleanDesc.match(/section\s*:\s*([^\n\r\\]+)/i);
+  if (sectionMatch) {
+    const sv = sectionMatch[1].trim().toLowerCase();
+    if (sv.includes('a')) sectionTag = 'A';
+    else if (sv.includes('b')) sectionTag = 'B';
+    else sectionTag = 'both';
+    cleanDesc = cleanDesc.replace(/section\s*:[^\n]*/i, '').trim();
+  }
+  return {category,cleanDesc,extractedUrl, sectionTag};
+  }
 
 // ─── SYNC ─────────────────────────────────────────────────────────────────────
 async function autoSync() {
@@ -196,6 +205,12 @@ function setFilter(f) {
   render();
 }
 function eventVisible(ev) {
+  // Section filter — only apply for A and B, not F2F
+  if (currentSection === 'A' || currentSection === 'B') {
+    const tag = ev.sectionTag || 'both';
+    if (tag !== 'both' && tag !== currentSection) return false;
+  }
+  // Specialization filter
   if (currentFilter==='all') return true;
   if (currentFilter==='finance') return ev.category==='common'||ev.category==='finance';
   if (currentFilter==='marketing') return ev.category==='common'||ev.category==='marketing';
