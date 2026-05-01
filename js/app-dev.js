@@ -132,7 +132,7 @@ function parseICS(text) {
     if (key==='BEGIN' && val==='VEVENT') cur={};
     else if (key==='END' && val==='VEVENT' && cur) {
       if (cur.start) {
-        const {category,cleanDesc,extractedUrl} = parseSpecialization(cur.description||'');
+        const {category,cleanDesc,extractedUrl, sectionTag} = parseSpecialization(cur.description||'');
         evs.push({id:Math.random().toString(36).slice(2),title:cur.title||'Event',
           start:cur.start,end:cur.end||cur.start,location:cur.location||'',
           url:cur.url?(cur.url.startsWith('http')?cur.url:'https://'+cur.url):extractedUrl||'',
