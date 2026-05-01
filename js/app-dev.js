@@ -168,8 +168,9 @@ function parseSpecialization(desc) {
   const sectionMatch = cleanDesc.match(/section\s*:\s*([^\n\r\\]+)/i);
   if (sectionMatch) {
     const sv = sectionMatch[1].trim().toLowerCase();
-    if (sv.includes('a')) sectionTag = 'A';
-    else if (sv.includes('b')) sectionTag = 'B';
+    if (sv === 'a') sectionTag = 'A';
+    else if (sv === 'b') sectionTag = 'B';
+    else if (sv === 'both') sectionTag = 'both';
     else sectionTag = 'both';
     cleanDesc = cleanDesc.replace(/section\s*:[^\n]*/i, '').trim();
   }
