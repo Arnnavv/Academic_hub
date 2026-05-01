@@ -72,6 +72,7 @@ function selectSection(section) {
   localStorage.setItem('selectedSection', section);
   localStorage.setItem('sectionTimestamp', Date.now().toString());
   icalUrl = SECTION_URLS[section];
+  currentSection = section;
   document.title = 'Class Schedule';
   setFavicon('📅');
   document.getElementById('sectionBadgeText').textContent = 'Section ' + section;
