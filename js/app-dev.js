@@ -57,6 +57,8 @@ let currentDate = new Date();
 let currentView = 'monthly';
 let currentFilter = 'all';
 let icalUrl = '';
+let currentSection = '';
+
 
 // ─── CONSTANTS ────────────────────────────────────────────────────────────────
 const HOUR_HEIGHT = 60;
