@@ -405,7 +405,7 @@ function closeModal(e) {
 }
 
 // ─── INIT ─────────────────────────────────────────────────────────────────────
-const SESSION_DAYS = 2 / 1440; // 2 minutes for testing — change to e.g. 30 for production
+const SESSION_DAYS = 8 / 24; // 2 minutes for testing — change to e.g. 30 for production
 
 const savedSection = localStorage.getItem('selectedSection');
 const savedTime = localStorage.getItem('sectionTimestamp');
