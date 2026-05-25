@@ -257,7 +257,7 @@ function renderMonthly() {
     else if (isToday) { dateEl.textContent=new Date(year,month,day).toLocaleDateString('en-US',{month:'short',day:'numeric'}); }
     else { dateEl.textContent=day; }
     cell.appendChild(dateEl);
-    const dayEvs=events.filter(e=>{ const d=new Date(e.start); return d.getFullYear()===year&&d.getMonth()===month&&d.getDate()===day; }).sort((a,b)=>a.start-b.start);
+    const dayEvs=events.filter(e=>{ const d=new Date(e.start); return d.getFullYear()===year&&d.getMonth()===month&&d.getDate()===day; }).filter(ev=>eventVisible(ev)).sort((a,b)=>a.start-b.start);
     dayEvs.slice(0,3).forEach(ev=>{
       const chip=document.createElement('div'); chip.className='event-chip chip-'+ev.category;
       if (!eventVisible(ev)) chip.classList.add('chip-hidden');
@@ -268,7 +268,7 @@ function renderMonthly() {
       const more=document.createElement('div');
       more.className='more-events';
       more.textContent='+'+(dayEvs.length-3)+' more';
-      more.onclick=()=>openDayPopup(dayEvs, new Date(year,month,day));
+      more.onclick=()=>openDayPopup(dayEvs.filter(ev=>eventVisible(ev)), new Date(year,month,day));
       cell.appendChild(more);
     }
     grid.appendChild(cell);
