@@ -183,7 +183,7 @@ async function autoSync() {
   if (!icalUrl || icalUrl.includes('PASTE')) return;
   setSyncing(true);
   try {
-    const proxyUrl = 'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(icalUrl) + '&_=' + Date.now();
+    const proxyUrl = 'https://academichub.arnav-jain12.workers.dev/?url=' + encodeURIComponent(icalUrl) + '&_=' + Date.now();
     const res = await fetch(proxyUrl);
     const text = await res.text();
     if (!text.includes('VCALENDAR')) { setSyncing(false,'Sync failed'); return; }
