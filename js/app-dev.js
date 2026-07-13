@@ -209,24 +209,44 @@ function parseICS(text) {
         if (cur.rrule) {
           const occurrences = expandRRule(cur.start, cur.end, cur.rrule, cur.exdates||[]);
           occurrences.forEach(({start,end}) => {
-            evs.push({...baseEvent, id:Math.random().toString(36).slice(2), start, end});
+            evs.push({...baseEvent, id:Math.random().toString(36).slice(2), start, end, uid:cur.uid||null});
           });
+        } else if (cur.recurrenceId) {
+          // This is a modified occurrence — store it separately
+          evs.push({...baseEvent, id:Math.random().toString(36).slice(2), start:cur.start, end:cur.end||cur.start, uid:cur.uid||null, recurrenceId:cur.recurrenceId});
         } else {
-          evs.push({...baseEvent, id:Math.random().toString(36).slice(2), start:cur.start, end:cur.end||cur.start});
-        }
+          evs.push({...baseEvent, id:Math.random().toString(36).slice(2), start:cur.start, end:cur.end||cur.start, uid:cur.uid||null});
+      }
       }
       cur=null;
     } else if (cur) {
-      if (key==='SUMMARY') cur.title=val;
-      else if (key==='DTSTART') cur.start=parseDate(raw);
-      else if (key==='DTEND') cur.end=parseDate(raw);
-      else if (key==='LOCATION') cur.location=val;
-      else if (key==='URL') cur.url=val;
-      else if (key==='DESCRIPTION') cur.description=val.replace(/\\n/g,'\n').replace(/\\,/g,',');
-      else if (key==='RRULE') cur.rrule=val;
-      else if (key==='EXDATE') cur.exdates=(cur.exdates||[]).concat(val.split(',').map(v=>parseDate(v.includes(':')?v:'EXDATE:'+v)));
-    }
+        if (key==='SUMMARY') cur.title=val;
+        else if (key==='DTSTART') cur.start=parseDate(raw);
+        else if (key==='DTEND') cur.end=parseDate(raw);
+        else if (key==='LOCATION') cur.location=val;
+        else if (key==='URL') cur.url=val;
+        else if (key==='DESCRIPTION') cur.description=val.replace(/\\n/g,'\n').replace(/\\,/g,',');
+        else if (key==='RRULE') cur.rrule=val;
+        else if (key==='EXDATE') cur.exdates=(cur.exdates||[]).concat(val.split(',').map(v=>parseDate(v.includes(':')?v:'EXDATE:'+v)));
+        else if (key==='RECURRENCE-ID') cur.recurrenceId=parseDate(raw);
+        else if (key==='UID') cur.uid=val;
+      }
   }
+  // Remove recurring occurrences that have been overridden by RECURRENCE-ID events
+  const overrides = evs.filter(e => e.recurrenceId);
+  overrides.forEach(override => {
+    const overrideDate = override.recurrenceId;
+    // Remove the original occurrence from the recurring series that matches this date
+    const idx = evs.findIndex(e => 
+      !e.recurrenceId &&
+      e.uid === override.uid &&
+      e.start.getFullYear() === overrideDate.getFullYear() &&
+      e.start.getMonth() === overrideDate.getMonth() &&
+      e.start.getDate() === overrideDate.getDate()
+    );
+    if (idx !== -1) evs.splice(idx, 1);
+  });
+
   return evs;
 }
 
