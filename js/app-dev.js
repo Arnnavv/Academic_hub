@@ -46,9 +46,9 @@ function showPortal() {
 // ─── SECTION CONFIG ───────────────────────────────────────────────────────────
 // Add iCal URLs for each section here
 const SECTION_URLS = {
-  'A':   'https://p136-caldav.icloud.com/published/2/MjAwNDQ0OTc1NDkyMDA0NJyAi43l6XUcJJh8O3fV_-Sp0FYDItEwZIhkGy0jKAXnBMy_0uSZ3zJilFwzBqGyqX-2SjO7zSNMkQn0AcS2JLA',
-  'B':   'https://p136-caldav.icloud.com/published/2/MjAwNDQ0OTc1NDkyMDA0NJyAi43l6XUcJJh8O3fV_-Sp0FYDItEwZIhkGy0jKAXnBMy_0uSZ3zJilFwzBqGyqX-2SjO7zSNMkQn0AcS2JLA',
-  'C':   'https://p136-caldav.icloud.com/published/2/MjAwNDQ0OTc1NDkyMDA0NJyAi43l6XUcJJh8O3fV_-Sp0FYDItEwZIhkGy0jKAXnBMy_0uSZ3zJilFwzBqGyqX-2SjO7zSNMkQn0AcS2JLA',
+  'A':   'https://outlook.live.com/owa/calendar/00000000-0000-0000-0000-000000000000/88a096a5-1f3f-4f7c-b8d9-f5f6b059006c/cid-68D162D0749195B1/calendar.ics',
+  'B':   'https://outlook.live.com/owa/calendar/00000000-0000-0000-0000-000000000000/88a096a5-1f3f-4f7c-b8d9-f5f6b059006c/cid-68D162D0749195B1/calendar.ics',
+  'C':   'https://outlook.live.com/owa/calendar/00000000-0000-0000-0000-000000000000/88a096a5-1f3f-4f7c-b8d9-f5f6b059006c/cid-68D162D0749195B1/calendar.ics',
 };
 
 // ─── STATE ────────────────────────────────────────────────────────────────────
