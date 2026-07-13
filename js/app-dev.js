@@ -96,6 +96,70 @@ document.addEventListener('click', () => {
   if (dd) dd.style.display = 'none';
 });
 
+// ─── RRULE EXPANDER ───────────────────────────────────────────────────────────
+function parseUntil(str) {
+  const y=+str.slice(0,4),mo=+str.slice(4,6)-1,d=+str.slice(6,8);
+  if (str.includes('T')) {
+    const h=+str.slice(9,11),mi=+str.slice(11,13);
+    return new Date(Date.UTC(y,mo,d,h,mi));
+  }
+  return new Date(y,mo,d);
+}
+
+function expandRRule(start, end, rrule, exdates) {
+  const occurrences = [];
+  const duration = end - start;
+  const parts = {};
+  rrule.split(';').forEach(p => {
+    const [k,v] = p.split('=');
+    parts[k] = v;
+  });
+  const freq = parts['FREQ'];
+  const interval = parseInt(parts['INTERVAL'] || '1');
+  const count = parts['COUNT'] ? parseInt(parts['COUNT']) : null;
+  const until = parts['UNTIL'] ? parseUntil(parts['UNTIL']) : null;
+  const byDay = parts['BYDAY'] ? parts['BYDAY'].split(',') : null;
+  const dayMap = {SU:0,MO:1,TU:2,WE:3,TH:4,FR:5,SA:6};
+  let current = new Date(start);
+  let num = 0;
+  const maxOccurrences = 500;
+  while (num < maxOccurrences) {
+    if (count !== null && occurrences.length >= count) break;
+    if (until !== null && current > until) break;
+    let matches = true;
+    if (byDay && freq === 'WEEKLY') {
+      matches = byDay.some(d => {
+        const dayStr = d.replace(/[0-9+-]/g,'');
+        return current.getDay() === dayMap[dayStr];
+      });
+    }
+    const isExcluded = exdates.some(ex => ex &&
+      ex.getFullYear()===current.getFullYear() &&
+      ex.getMonth()===current.getMonth() &&
+      ex.getDate()===current.getDate()
+    );
+    if (matches && !isExcluded) {
+      occurrences.push({start:new Date(current), end:new Date(current.getTime()+duration)});
+    }
+    if (freq==='DAILY') {
+      current = new Date(current.getTime() + interval*86400000);
+    } else if (freq==='WEEKLY') {
+      if (byDay && byDay.length > 1) {
+        current = new Date(current.getTime() + 86400000);
+      } else {
+        current = new Date(current.getTime() + interval*7*86400000);
+      }
+    } else if (freq==='MONTHLY') {
+      current = new Date(current.getFullYear(), current.getMonth()+interval, current.getDate(), current.getHours(), current.getMinutes());
+    } else {
+      break;
+    }
+    num++;
+  }
+  return occurrences;
+}
+
+
 // ─── iCAL PARSER ─────────────────────────────────────────────────────────────
 function parseICS(text) {
   text = text.replace(/\r\n[ \t]/g, '').replace(/\r\n/g, '\n').replace(/\n[ \t]/g, '');
@@ -133,11 +197,23 @@ function parseICS(text) {
     if (key==='BEGIN' && val==='VEVENT') cur={};
     else if (key==='END' && val==='VEVENT' && cur) {
       if (cur.start) {
-        const {category,cleanDesc,extractedUrl, sectionTag} = parseSpecialization(cur.description||'');
-        evs.push({id:Math.random().toString(36).slice(2),title:cur.title||'Event',
-          start:cur.start,end:cur.end||cur.start,location:cur.location||'',
+        const {category,cleanDesc,extractedUrl,sectionTag} = parseSpecialization(cur.description||'');
+        const baseEvent = {
+          title:cur.title||'Event',
+          location:cur.location||'',
           url:cur.url?(cur.url.startsWith('http')?cur.url:'https://'+cur.url):extractedUrl||'',
-          description:cleanDesc,category,sectionTag});
+          description:cleanDesc,
+          category,
+          sectionTag
+        };
+        if (cur.rrule) {
+          const occurrences = expandRRule(cur.start, cur.end, cur.rrule, cur.exdates||[]);
+          occurrences.forEach(({start,end}) => {
+            evs.push({...baseEvent, id:Math.random().toString(36).slice(2), start, end});
+          });
+        } else {
+          evs.push({...baseEvent, id:Math.random().toString(36).slice(2), start:cur.start, end:cur.end||cur.start});
+        }
       }
       cur=null;
     } else if (cur) {
@@ -147,6 +223,8 @@ function parseICS(text) {
       else if (key==='LOCATION') cur.location=val;
       else if (key==='URL') cur.url=val;
       else if (key==='DESCRIPTION') cur.description=val.replace(/\\n/g,'\n').replace(/\\,/g,',');
+      else if (key==='RRULE') cur.rrule=val;
+      else if (key==='EXDATE') cur.exdates=(cur.exdates||[]).concat(val.split(',').map(v=>parseDate(v.includes(':')?v:'EXDATE:'+v)));
     }
   }
   return evs;
